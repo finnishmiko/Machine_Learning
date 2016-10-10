@@ -65,6 +65,9 @@ def train_neural_network(x):
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(prediction,y) )
     # Training the model is done by repeatedly runnint this optimizer operation
     optimizer = tf.train.AdamOptimizer(1e-4).minimize(cost) # select optimization algorithm
+
+    # Save a checkpoint
+    saver = tf.train.Saver()
     
     # Test model accuracy by checking how many predictions matches to their labels.
     # argmax gives the index of highest entry along some axis. Output is list of booleans
@@ -73,7 +76,7 @@ def train_neural_network(x):
     # F.ex. [True, False, True, True] --> [1, 0, 1, 1] --> 0.75
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
-    hm_epochs = 10 # Select how many training cycles
+    hm_epochs = 3 # Select how many training cycles
     with tf.Session() as sess: # Open and close session with with syntax
         sess.run(tf.initialize_all_variables())
 
@@ -88,9 +91,51 @@ def train_neural_network(x):
 
             # Print the cost to see the training is improving
             print('Epoch', epoch, 'completed out of',hm_epochs,'loss:',epoch_loss)
+            saver.save(sess, "/tmp/train/", epoch)
 
         
         # Calculate the accuracy
         print('Accuracy:',accuracy.eval(feed_dict={x:mnist.test.images, y:mnist.test.labels, keep_prob: 1.0}))
 
+
+def load_neural_network(x):
+    prediction, keep_prob = neural_network_model(x)
+    # cost or loss or cross_entropy function
+    cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(prediction,y) )
+    # Training the model is done by repeatedly runnint this optimizer operation
+    optimizer = tf.train.AdamOptimizer(1e-4).minimize(cost) # select optimization algorithm
+
+    # Save a checkpoint
+    saver = tf.train.Saver()
+    
+    # Test model accuracy by checking how many predictions matches to their labels.
+    # argmax gives the index of highest entry along some axis. Output is list of booleans
+    correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+    # Cast to floating point numbers and take the mean
+    # F.ex. [True, False, True, True] --> [1, 0, 1, 1] --> 0.75
+    accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
+
+    hm_epochs = 3 # Select how many training cycles
+    with tf.Session() as sess: # Open and close session with with syntax
+        sess.run(tf.initialize_all_variables())
+        saver.restore(sess, "/tmp/train/-9") # restore saved checkpoint
+
+        # Training cycles
+        for epoch in range(hm_epochs):
+            epoch_loss = 0
+            for _ in range(int(mnist.train.num_examples/batch_size)): # train all batches
+                epoch_x, epoch_y = mnist.train.next_batch(batch_size)
+                # Fit the model and calculate cost
+                _, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y, keep_prob: 0.5})
+                epoch_loss += c # calculate cost per epoch
+
+            # Print the cost to see the training is improving
+            print('Epoch', epoch, 'completed out of',hm_epochs,'loss:',epoch_loss)
+            saver.save(sess, "/tmp/train/", epoch) # save a checkpoint
+        
+        # Calculate the accuracy
+        print('Accuracy:',accuracy.eval(feed_dict={x:mnist.test.images, y:mnist.test.labels, keep_prob: 1.0}))
+
+
 train_neural_network(x)
+#load_neural_network(x)
