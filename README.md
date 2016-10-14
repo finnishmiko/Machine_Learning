@@ -12,8 +12,10 @@
   * Hidden layers: 100, 100
   * Max iterations 400, actual 304 with tol=1e-4
   * Accuracy: test set 0.9758 and training set 0.9978
-  * Run time few minutes
-
+  * Run time 7 min
+- [Scikit-learn](http://scikit-learn.org/stable/index.html) (ver 0.18) Support Vector Machines (SVM)
+  * Accuracy: test set 0.9446, training set 0.9430
+  * Run time 37 min 
 
 ## CIFAR-10
 - [Dataset](http://www.cs.toronto.edu/~kriz/cifar.html)
