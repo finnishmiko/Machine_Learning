@@ -6,8 +6,13 @@
   * Accuracy after 10 epochs, three runs: 0.9772, 0.9759, 0.9744
   * Run time few minutes with Azure Ubuntu virtual machine type DS1_V2 (1 core, 3.5 GB)
 - Deep Convolutional Neural Network with [Tensorflow](https://www.tensorflow.org/)
-  * Accuracy after 10 epochs: 0.991, 0.9896
+  * Accuracy after 10 epochs: 0.9910, 0.9896
   * Run time was 62 minutes with Azure Ubuntu virtual machine type DS1_V2 (1 core, 3.5 GB) and 67 minutes when accuracy was calculated after every epoch
+- [Scikit-learn](http://scikit-learn.org/stable/index.html) (ver 0.18) Multi-Layer Perceptron (MPL)
+  * Hidden layers: 100, 100
+  * Max iterations 400, actual 304 with tol=1e-4
+  * Accuracy: test set 0.9758 and training set 0.9978
+  * Run time few minutes
 
 
 ## CIFAR-10
