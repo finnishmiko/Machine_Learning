@@ -1,3 +1,4 @@
 data/
 Scikit_CIFAR-10-test.py
 test.py
+MNIST_webapp/MNIST_webapp/__pycache__/
