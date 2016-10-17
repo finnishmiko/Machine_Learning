@@ -40,7 +40,7 @@ with open('data/clf-MPL-MNIST-layer100_100-iter400.pickle', 'wb') as f:
 def numberpredict(example):
     prediction = clf.predict(example)
     #print(prediction)
-    #plt.imshow(example.reshape(28,28))
+    #plt.imshow(example.reshape(28,28), cmap='Greys')
     #plt.show()
     return int(prediction)
 sample = random.randint(0,9999) # 200 was not recognized with 97.1% accuracy
