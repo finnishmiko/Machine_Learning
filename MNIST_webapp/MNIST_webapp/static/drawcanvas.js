@@ -1,22 +1,18 @@
 window.addEventListener("load", function(event){
     var canvas = $("#canvas").get(0);
-    var touchableDevice = ('ontouchstart' in window);
+    var touchDevice = ('ontouchstart' in window);
 
     if (canvas.getContext){
-
         var context = canvas.getContext('2d');
-
         var drawing = false;
         var prev = {};
 
-        canvas.width = 1 * $("#canvas").width();
-        canvas.height = 1 * $("#canvas").height();
-        context.scale(1.0, 1.0);
+        canvas.width = $("#canvas").width();
+        canvas.height = $("#canvas").height();
 
-        context.lineJoin = "round";
-        context.lineCap = "round";
+        context.lineCap = 'round';
         context.lineWidth = 10;
-        context.strokeStyle = 'rgb(0,0,0)';
+        context.strokeStyle = 'black';
 
         $("#canvas").bind('touchstart mousedown', function(e) {
             e.preventDefault();
@@ -26,17 +22,14 @@ window.addEventListener("load", function(event){
 
         $("#canvas").bind('touchmove mousemove', function(e) {
             if(drawing == false) return;
-
             e.preventDefault();
             curr = getPointOnCanvas(this, event, e);
 
-            // draw
             context.beginPath();
             context.moveTo(prev.x, prev.y);
             context.lineTo(curr.x, curr.y);
             context.stroke();
 
-            // update
             prev = curr;
         });
 
@@ -45,10 +38,10 @@ window.addEventListener("load", function(event){
             estimate(context);
         });
 
-        var getPointOnCanvas = function(elem, windowEvent, touchEvent ) {
+        var getPointOnCanvas = function(elem, winEvent, touchEvent ) {
             return {
-                x : (touchableDevice ? windowEvent.changedTouches[0].clientX : touchEvent.clientX ) - $(elem).offset().left,
-                y : (touchableDevice ? windowEvent.changedTouches[0].clientY : touchEvent.clientY ) - $(elem).offset().top
+                x : (touchDevice ? winEvent.changedTouches[0].clientX : touchEvent.clientX ) - $(elem).offset().left,
+                y : (touchDevice ? winEvent.changedTouches[0].clientY : touchEvent.clientY ) - $(elem).offset().top
             };
         };
 
@@ -65,7 +58,7 @@ window.addEventListener("load", function(event){
                 data: JSON.stringify({"input": img_buf}),
                 contentType: 'application/json',
                 success: function(result) {
-                    console.log(result);
+                    //console.log(result);
                     $("#estimated").text("Estimated = " + result.estimated);
                 }
             });
@@ -77,7 +70,7 @@ window.addEventListener("load", function(event){
             tmpCanvas.height = height;
             var tmpContext = tmpCanvas.getContext('2d');
             tmpContext.drawImage(context.canvas, 0, 0, width, height);
-            var image = tmpContext.getImageData(0,0,width,height);
+            var image = tmpContext.getImageData(0, 0, width, height);
 
             var buffer = []
             for( var i = 0; i < image.data.length; i += 4 ) {
