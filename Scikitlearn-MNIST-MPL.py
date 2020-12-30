@@ -1,5 +1,9 @@
 import matplotlib.pyplot as plt
-from sklearn.datasets import fetch_mldata
+import mpl_toolkits
+from mpl_toolkits.mplot3d import Axes3D
+
+# from sklearn.datasets import fetch_mldata
+from sklearn.datasets import fetch_openml
 from sklearn.neural_network import MLPClassifier
 import numpy as np
 import random
@@ -8,8 +12,10 @@ try:
 except:
     import cPickle as pickle
 
+# mnist = fetch_mldata("MNIST original")
+mnist = fetch_openml('mnist_784', version=1, cache=True)
+mnist.target = mnist.target.astype(np.int8) # fetch_openml() returns targets as strings
 
-mnist = fetch_mldata("MNIST original")
 # rescale the data, use the traditional train/test split
 X, y = mnist.data / 255., mnist.target
 X_train, X_test = X[:60000], X[60000:]
