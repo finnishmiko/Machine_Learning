@@ -9,7 +9,8 @@
 
 
 import numpy as np
-from sklearn import preprocessing, cross_validation, neighbors, svm
+from sklearn import preprocessing, neighbors, svm
+from sklearn.model_selection import cross_validate
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import SGDClassifier
 
